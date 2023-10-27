@@ -4,3 +4,5 @@
 
 /src/TShop/*/*/*/obj
 /src/TShop/.vs
+/src/TShop/obj
+/src/TShop/Services/*/*/bin
