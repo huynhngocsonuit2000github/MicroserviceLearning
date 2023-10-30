@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+service Userpro {
+  rpc Login (LoginRequestpro) returns (LoginResponsepro);
+}
+
+message LoginRequestpro {
+  string username = 1;
+  string password = 2;
+}
+
+message LoginResponsepro {
+  string id = 1;
+  string roleId = 2;
+  string name = 4;
+  string address = 7;
+  string phone = 8;
+  string email = 9;
+}

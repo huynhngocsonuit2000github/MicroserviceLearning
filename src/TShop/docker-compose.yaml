@@ -6,9 +6,27 @@ services:
     container_name: catalogdb
     restart: always
     volumes:
-      - mongodb:/data/db
+      - mongo_catalog_db:/data/db
     ports:
       - 27017:27017
+
+  authenticatedb:
+    image: mongo
+    container_name: authenticatedb
+    restart: always
+    volumes:
+      - mongo_authenticate_db:/data/db
+    ports:
+      - 27018:27017
+
+  usersdb:
+    image: mongo
+    container_name: usersdb
+    restart: always
+    volumes:
+      - mongo_users_db:/data/db
+    ports:
+      - 27019:27017
   
   catalog.api:
     image: tshop-catalog-img:latest
@@ -20,6 +38,49 @@ services:
       - catalogdb
     ports:
       - 8000:80
+  
+  authenticate.api:
+    image: tshop-authenticate-img:latest
+    container_name: authenticateapi
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - AuthenticateDatabaseSettings:ConnectionString=mongodb://authenticatedb:27017
+    depends_on:
+      - authenticatedb
+    ports:
+      - 8001:80
+  
+  users.api:
+    image: tshop-users-img:latest
+    container_name: usersapi
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - UserDatabaseSettings:ConnectionString=mongodb://usersdb:27017
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=ssl123
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+    depends_on:
+      - usersdb
+    ports:
+      - 8002:80
+      - 8003:443
+    volumes:
+      - ./https:/https:ro
+          
+  webapp:
+    image: mcr.microsoft.com/dotnet/samples:aspnetapp
+    ports:
+      - 80
+      - 443
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=ssl123
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+    volumes:
+      - ./https:/https:ro
 
 volumes:
-  mongodb:
+  mongo_catalog_db:
+  mongo_authenticate_db:
+  mongo_users_db:

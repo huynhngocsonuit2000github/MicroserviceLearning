@@ -21,8 +21,6 @@ Pull image
 Run docker image
 	docker run -d -p 27017:27017 --name tshop-mongo mongo
 
-
-https://learn.microsoft.com/en-us/aspnet/core/tutorials/first-mongo-app?view=aspnetcore-7.0&tabs=visual-studio
 Install essential nuget packages
 	dotnet add package MongoDB.Driver
 
@@ -70,3 +68,7 @@ Register dbcontext
 
 Create product repository and register it inside the program file
     IProductRepository and ProductRepository
+
+    
+https://www.dotnetcoban.com/2019/09/mongodb-in-asp-dotnet-core.html
+https://learn.microsoft.com/en-us/aspnet/core/tutorials/first-mongo-app?view=aspnetcore-7.0&tabs=visual-studio
