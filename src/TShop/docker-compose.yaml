@@ -27,6 +27,15 @@ services:
       - mongo_users_db:/data/db
     ports:
       - 27019:27017
+
+  discountsdb:
+    image: mongo
+    container_name: discountsdb
+    restart: always
+    volumes:
+      - mongo_discounts_db:/data/db
+    ports:
+      - 27020:27017
   
   catalog.api:
     image: tshop-catalog-img:latest
@@ -45,10 +54,11 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - AuthenticateDatabaseSettings:ConnectionString=mongodb://authenticatedb:27017
+      - GrpcService:User:UserApiUrl=https://usersapi:443
     depends_on:
       - authenticatedb
     ports:
-      - 8001:80
+      - 8001:80 
   
   users.api:
     image: tshop-users-img:latest
@@ -65,22 +75,10 @@ services:
       - 8002:80
       - 8003:443
     volumes:
-      - ./https:/https:ro
-          
-  webapp:
-    image: mcr.microsoft.com/dotnet/samples:aspnetapp
-    ports:
-      - 80
-      - 443
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:443;http://+:80
-      - ASPNETCORE_Kestrel__Certificates__Default__Password=ssl123
-      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
-    volumes:
-      - ./https:/https:ro
+      - ./https:/https:ro 
 
 volumes:
   mongo_catalog_db:
   mongo_authenticate_db:
   mongo_users_db:
+  mongo_discounts_db:

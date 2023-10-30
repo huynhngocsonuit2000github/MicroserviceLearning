@@ -8,24 +8,41 @@ using Grpc.Net.Client;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
 
 builder.Services.Configure<AuthenticateDatabaseSettings>(builder.Configuration.GetSection("AuthenticateDatabaseSettings"));
 
 builder.Services.AddScoped<IAuthenticateContext, AuthenticateContext>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
-builder.Services.AddScoped(e => GrpcChannel.ForAddress("https://localhost:8003"));
+// Need to append the options to disable check https certificate
+builder.Services.AddScoped(e =>
+{
+    var address = builder.Configuration.GetSection("GrpcService:User:UserApiUrl")!.Value!.ToString()!;
+    var options = new GrpcChannelOptions()
+    {
+        HttpHandler = new HttpClientHandler()
+        {
+            ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+        }
+    };
+
+    var channel = GrpcChannel.ForAddress(address, options);
+    return channel;
+});
+
 builder.Services.AddScoped<IUserproGrpc, UserproGrpc>();
 
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
 });
+
+
 
 
 // Jwt service

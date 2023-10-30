@@ -23,6 +23,7 @@ namespace Authenticate.Api.SyncData
 
         public async Task<LoginResponse> Login(LoginRequest request)
         {
+            _logger.LogWarning(_channel.ToJson());
             var client = new Userpro.UserproClient(_channel);
 
             var requestori = new LoginRequestpro()
