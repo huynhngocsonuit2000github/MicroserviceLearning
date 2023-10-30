@@ -76,6 +76,17 @@ services:
       - 8003:443
     volumes:
       - ./https:/https:ro 
+  
+  discounts.api:
+    image: tshop-discounts-img:latest
+    container_name: discountsapi
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - DiscountDatabaseSettings:ConnectionString=mongodb://discountsdb:27017
+    depends_on:
+      - discountsdb
+    ports:
+      - 8004:80 
 
 volumes:
   mongo_catalog_db:
