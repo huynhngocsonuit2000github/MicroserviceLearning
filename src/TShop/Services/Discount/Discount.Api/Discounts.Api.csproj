@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
@@ -7,8 +7,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+	  <PackageReference Include="Grpc.AspNetCore" Version="2.49.0" />
     <PackageReference Include="MongoDB.Driver" Version="2.22.0" />
 	  <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Protos\discountpro.proto">
+      <GrpcServices>Server</GrpcServices>
+    </None>
+  </ItemGroup>
+
+	<ItemGroup>
+		<Protobuf Include="Protos\discountpro.proto" GrpcServices="Server" />
+	</ItemGroup>
 
 </Project>

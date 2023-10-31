@@ -52,10 +52,15 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ProductDatabaseSettings:ConnectionString=mongodb://catalogdb:27017
+      - ASPNETCORE_URLS=https://+:443;
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=ssl123
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
     depends_on:
       - catalogdb
     ports:
-      - 8000:80
+      - 8000:443
+    volumes:
+      - ./https:/https:ro 
   
   authenticate.api:
     image: tshop-authenticate-img:latest
@@ -92,10 +97,15 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - DiscountDatabaseSettings:ConnectionString=mongodb://discountsdb:27017
+      - ASPNETCORE_URLS=https://+:443
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=ssl123
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
     depends_on:
       - discountsdb
     ports:
-      - 8004:80 
+      - 8004:443
+    volumes:
+      - ./https:/https:ro 
 
 volumes:
   mongo_catalog_db:

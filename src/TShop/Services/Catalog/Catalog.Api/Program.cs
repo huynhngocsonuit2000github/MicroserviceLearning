@@ -2,6 +2,7 @@ using Catalog.Api.Data;
 using Catalog.Api.Entity;
 using Catalog.Api.Options;
 using Catalog.Api.Repository;
+using Catalog.Api.Services;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,6 +20,8 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
 });
+
+builder.Services.AddGrpc();
 
 var app = builder.Build();
 
@@ -45,6 +48,7 @@ using (var scope = app.Services.CreateScope())
 
 app.UseAuthorization();
 
+app.MapGrpcService<ProductproService>();
 app.MapControllers();
 
 app.Run();
