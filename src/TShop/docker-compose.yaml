@@ -36,6 +36,15 @@ services:
       - mongo_discounts_db:/data/db
     ports:
       - 27020:27017
+
+  basketdb:
+    image: mongo
+    container_name: basketdb
+    restart: always
+    volumes:
+      - mongo_basket_db:/data/db
+    ports:
+      - 27021:27017
   
   catalog.api:
     image: tshop-catalog-img:latest
@@ -93,3 +102,4 @@ volumes:
   mongo_authenticate_db:
   mongo_users_db:
   mongo_discounts_db:
+  mongo_basket_db:

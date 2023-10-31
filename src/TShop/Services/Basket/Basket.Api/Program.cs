@@ -1,7 +1,6 @@
-using Catalog.Api.Data;
-using Catalog.Api.Entity;
-using Catalog.Api.Options;
-using Catalog.Api.Repository;
+using Basket.Api.Data;
+using Basket.Api.Options;
+using Basket.Api.Repository;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,10 +9,13 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-builder.Services.Configure<ProductDatabaseSettings>(
-    builder.Configuration.GetSection("ProductDatabaseSettings"));
-builder.Services.AddScoped<ICatalogContext, CatalogContext>();
-builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.Configure<BasketDatabaseSettings>(
+    builder.Configuration.GetSection("BasketDatabaseSettings"));
+
+builder.Services.AddScoped<IBasketContext, BasketContext>();
+builder.Services.AddScoped<ICartRepository, CartRepository>();
+builder.Services.AddScoped<ICartItemRepository, CartItemRepository>();
+
 
 builder.Services.AddSwaggerGen(c =>
 {
@@ -24,24 +26,23 @@ var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+
+    var context = services.GetRequiredService<IBasketContext>();
+    var logger = services.GetRequiredService<ILogger<IBasketContext>>();
+
+    // Ensure that always create the new database if if is not exists
+    // await context.Database.EnsureCreatedAsync();
+    await SeedingData.Seeding(context, logger);
+}
 
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
 });
-
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
-
-    var context = services.GetRequiredService<ICatalogContext>();
-    var logger = services.GetRequiredService<ILogger<ICatalogContext>>();
-
-    // Ensure that always create the new database if if is not exists
-    // await context.Database.EnsureCreatedAsync();
-    await SeedingData.Seeding(context, logger);
-}
 
 app.UseAuthorization();
 

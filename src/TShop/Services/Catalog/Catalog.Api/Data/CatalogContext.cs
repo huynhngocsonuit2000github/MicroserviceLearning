@@ -14,7 +14,6 @@ namespace Catalog.Api.Data
             var client = new MongoClient(settingValue.ConnectionString);
             var database = client.GetDatabase(settingValue.DatabaseName);
             Products = database.GetCollection<Product>(settingValue.ProductsCollectionName);
-            //Products.Seeding();
         }
         public IMongoCollection<Product> Products { get; }
     }
