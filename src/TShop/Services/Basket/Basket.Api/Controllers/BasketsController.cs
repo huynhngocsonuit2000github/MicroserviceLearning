@@ -1,6 +1,7 @@
 ﻿using Basket.Api.Entity;
 using Basket.Api.Model;
 using Basket.Api.Repository;
+using Basket.Api.SyncData;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
 using System.Net;
@@ -14,12 +15,16 @@ namespace Basket.Api.Controllers
         private readonly ICartRepository _cartRepository;
         private readonly ILogger<BasketsController> _logger;
         private readonly ICartItemRepository _cartItemRepository;
+        private readonly IDiscountproGrpc _discountproGrpc;
+        private readonly IProductproGrpc _productproGrpc;
 
-        public BasketsController(ICartRepository repository, ILogger<BasketsController> logger, ICartItemRepository cartItemRepository)
+        public BasketsController(ICartRepository repository, ILogger<BasketsController> logger, ICartItemRepository cartItemRepository, IDiscountproGrpc discountproGrpc, IProductproGrpc productproGrpc)
         {
             _cartRepository = repository;
             _logger = logger;
             _cartItemRepository = cartItemRepository;
+            _discountproGrpc = discountproGrpc;
+            _productproGrpc = productproGrpc;
         }
 
         [HttpGet("{id:length(24)}", Name = "GetCartById")]
@@ -108,6 +113,8 @@ namespace Basket.Api.Controllers
             var currentCart = await _cartRepository.GetCartByUserId(request.UserId);
 
             // Call Grpc to get product information
+            var productDiscountPro = await _discountproGrpc.GetDiscountByProductIdAsync(request.ProductId);
+            var productPro = await _productproGrpc.GetByIdAsync(request.ProductId);
             //var product = ///
 
             var existingCartItem = await _cartItemRepository.GetCartItemByProductId(request.ProductId);
@@ -116,10 +123,10 @@ namespace Basket.Api.Controllers
                 var newCartItem = new CartItem()
                 {
                     CartId = currentCart.Id.ToString(),
-                    OriginalPrice = 5, // from frpc Catalog
-                    FinalPrice = 5, // from grpc, Catalog and Discount
+                    OriginalPrice = (decimal)productPro.Price, // from frpc Catalog
+                    FinalPrice = (decimal)productPro.Price - (decimal)productDiscountPro.Amount, // from grpc, Catalog and Discount
                     ProductId = request.ProductId,
-                    ProductName = "", // from grpc Catalog
+                    ProductName = productPro.Name, // from grpc Catalog
                     Quantity = request.Quantity,
                 };
                 await _cartItemRepository.CreateCartItem(newCartItem);
@@ -127,8 +134,8 @@ namespace Basket.Api.Controllers
             }
             else
             {
-                existingCartItem.OriginalPrice = 5;// from frpc Catalog
-                existingCartItem.FinalPrice = 5;// from grpc, Catalog and Discount
+                existingCartItem.OriginalPrice = (decimal)productPro.Price;// from frpc Catalog
+                existingCartItem.FinalPrice = (decimal)productPro.Price - (decimal)productDiscountPro.Amount;// from grpc, Catalog and Discount
                 existingCartItem.Quantity = request.Quantity;
                 await _cartItemRepository.UpdateCartItem(existingCartItem);
             }

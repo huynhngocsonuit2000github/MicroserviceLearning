@@ -1,6 +1,9 @@
 using Basket.Api.Data;
+using Basket.Api.Factory;
 using Basket.Api.Options;
 using Basket.Api.Repository;
+using Basket.Api.SyncData;
+using Grpc.Net.Client;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,6 +24,11 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
 });
+
+// Need to append the options to disable check https certificate
+builder.Services.AddScoped<IGrpcChannelFactory, GrpcChannelFactory>();
+builder.Services.AddScoped<IDiscountproGrpc, DiscountproGrpc>();
+builder.Services.AddScoped<IProductproGrpc, ProductproGrpc>();
 
 var app = builder.Build();
 

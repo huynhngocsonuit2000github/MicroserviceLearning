@@ -106,6 +106,24 @@ services:
       - 8004:443
     volumes:
       - ./https:/https:ro 
+  
+  basketapi.api:
+    image: tshop-basket-img:latest
+    container_name: basketapiapi
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - BasketDatabaseSettings:ConnectionString=mongodb://basketdb:27017
+      - GrpcService:Catalog:CatalogApiUrl=https://catalogapi:443
+      - GrpcService:Discount:DiscountApiUrl=https://discountsapi:443
+      - ASPNETCORE_URLS=https://+:443
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=ssl123
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+    depends_on:
+      - basketdb
+    ports:
+      - 8005:443
+    volumes:
+      - ./https:/https:ro 
 
 volumes:
   mongo_catalog_db:

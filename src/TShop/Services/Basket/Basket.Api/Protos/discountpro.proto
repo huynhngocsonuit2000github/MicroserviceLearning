@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+service Discountpro {
+  rpc GetByProductId (GetByProductIdRequestpro) returns (GetByProductIdResponsepro);
+}
+
+message GetByProductIdRequestpro {
+  string productId = 1; 
+}
+
+message GetByProductIdResponsepro {
+  string id = 1;
+  string productId = 2;
+  string productName = 3;
+  string description = 4;
+  double amount = 5; 
+}
