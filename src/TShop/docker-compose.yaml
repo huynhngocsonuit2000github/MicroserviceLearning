@@ -1,4 +1,4 @@
-version: '3.4'
+version: '3.6'
 
 services:
   catalogdb:
@@ -45,6 +45,19 @@ services:
       - mongo_basket_db:/data/db
     ports:
       - 27021:27017
+
+  orderingdb:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    user: root
+    container_name: orderingdb
+    restart: always
+    environment:
+        - SA_PASSWORD=Password123
+        - ACCEPT_EULA=Y
+    volumes:
+      - sql_ordering_db:/var/opt/mssql/data
+    ports:
+      - 1434:1433
   
   catalog.api:
     image: tshop-catalog-img:latest
@@ -109,6 +122,7 @@ services:
   
   basketapi.api:
     image: tshop-basket-img:latest
+    user: root
     container_name: basketapiapi
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
@@ -131,3 +145,4 @@ volumes:
   mongo_users_db:
   mongo_discounts_db:
   mongo_basket_db:
+  sql_ordering_db:
