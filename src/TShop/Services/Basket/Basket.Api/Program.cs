@@ -35,9 +35,7 @@ builder.Services.AddMassTransit(e =>
 {
     e.UsingRabbitMq((context, configurator) =>
     {
-        var rabbitMQSettings = builder.Configuration.GetSection(nameof(RabbitMQSettings)).Get<RabbitMQSettings>();
-        //configurator.Host(rabbitMQSettings!.Host);
-        //configurator.ConfigureEndpoints(context, new KebabCaseEndpointNameFormatter("basketapiapi", false));
+        var rabbitMQSettings = builder.Configuration.GetSection(nameof(RabbitMQSettings)).Get<RabbitMQSettings>(); 
 
         configurator.Host(rabbitMQSettings!.Host, h => { h.Username("user"); h.Password("user123"); });
         configurator.ConfigureEndpoints(context);

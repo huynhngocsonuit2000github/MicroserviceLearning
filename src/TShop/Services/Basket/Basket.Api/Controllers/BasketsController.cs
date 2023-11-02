@@ -6,6 +6,7 @@ using Common;
 using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
+using System.Collections.Generic;
 using System.Net;
 
 namespace Basket.Api.Controllers
@@ -31,8 +32,48 @@ namespace Basket.Api.Controllers
             _publishEndpoint = publishEndpoint;
         }
 
+
+        [HttpGet]
+        [ProducesResponseType(typeof(IEnumerable<CartResponse>), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult<CartResponse>> GetAllCarts()
+        {
+            _logger.LogInformation("==>> Start GetAllCarts");
+            var carts = await _cartRepository.GetCarts();
+
+            if (carts is null)
+                return Ok(new List<CartResponse>());
+
+            var res = new List<CartResponse>();
+
+            foreach (var cart in carts)
+            {
+                var cartItems = await _cartItemRepository.GetCartItemByCartId(cart.Id.ToString());
+
+                var response = new CartResponse()
+                {
+                    Id = cart.Id.ToString(),
+                    FinalPrice = cart.FinalPrice,
+                    OriginalPrice = cart.OriginalPrice,
+                    UserId = cart.UserId,
+                    CartItemIds = cartItems.Select(e => new CartItemResponse()
+                    {
+                        Id = e.Id,
+                        OriginalPrice = e.OriginalPrice,
+                        FinalPrice = e.FinalPrice,
+                        ProductId = e.ProductId,
+                        ProductName = e.ProductName,
+                        Quantity = e.Quantity
+                    }).ToList()
+                };
+
+                res.Add(response);
+            }
+
+            return Ok(res);
+        }
+
         [HttpGet("{id:length(24)}", Name = "GetCartById")]
-        [ProducesResponseType(typeof(IEnumerable<Cart>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(CartResponse), (int)HttpStatusCode.OK)]
         public async Task<ActionResult<CartResponse>> GetCartById(string id)
         {
             _logger.LogInformation("==>> Start GetCartById: " + id);
@@ -64,7 +105,7 @@ namespace Basket.Api.Controllers
         }
 
         [HttpGet("GetCartByUserId/{userId}", Name = "GetCartByUserId")]
-        [ProducesResponseType(typeof(IEnumerable<Cart>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(CartResponse), (int)HttpStatusCode.OK)]
         public async Task<ActionResult<CartResponse>> GetCartByUserId(string userId)
         {
             _logger.LogInformation("==>> Start GetCartByUserId: " + userId);
@@ -161,8 +202,20 @@ namespace Basket.Api.Controllers
 
             var cart = await _cartRepository.GetCartByUserId(userId);
 
+            if (cart is null)
+            {
+                _logger.LogWarning("==>> The cart corresponding with this user is not found");
+                return NotFound();
+            }
+
             var cartItems = await _cartItemRepository.GetCartItemByCartId(cart.Id.ToString());
-             
+
+            if (cartItems is null || cartItems.Count() ==0)
+            {
+                _logger.LogWarning("==>> The is no item in the cart corresponding with this user is not found");
+                return Ok("Ok");
+            }
+
             await _publishEndpoint.Publish(new OrderRequest()
             {
                 UserId = cart.UserId,
@@ -177,9 +230,13 @@ namespace Basket.Api.Controllers
             });
 
             // Chua remove, done remove
-            _logger.LogError("==>> TODO: Implement remove cart when successfully checkouting");
+            await _cartRepository.DeleteCart(cart.Id);
+            foreach (var item in cartItems)
+            {
+                await _cartItemRepository.DeleteCartItem(item.Id);
+            }
 
-            return Ok(1);
+            return Ok("Ok");
         }
     }
 }

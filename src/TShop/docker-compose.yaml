@@ -139,6 +139,24 @@ services:
       - 8005:443
     volumes:
       - ./https:/https:ro 
+  
+  orderingapi.api:
+    image: tshop-ordering-img:latest
+    user: root
+    container_name: orderingapiapi
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings:OrderingDbContextConnection=Server=orderingdb,1433; Database=OrderingDb; User Id=sa;Password=Password123;TrustServerCertificate=true;
+      - ASPNETCORE_URLS=https://+:443
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=ssl123
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+      - RabbitMQSettings:Host=rabbitmq
+    depends_on:
+      - orderingdb
+    ports:
+      - 8006:443
+    volumes:
+      - ./https:/https:ro 
 
   rabbitmq:
     container_name: rabbitmq

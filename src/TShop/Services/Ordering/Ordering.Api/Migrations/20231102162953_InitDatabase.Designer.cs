@@ -12,7 +12,7 @@ using Ordering.Api.Data;
 namespace Ordering.Api.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231101145142_InitDatabase")]
+    [Migration("20231102162953_InitDatabase")]
     partial class InitDatabase
     {
         /// <inheritdoc />
@@ -37,10 +37,10 @@ namespace Ordering.Api.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<decimal>("FinalPrice")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18, 2)");
 
                     b.Property<decimal>("OriginalPrice")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18, 2)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -60,13 +60,13 @@ namespace Ordering.Api.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<decimal>("FinalPrice")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18, 2)");
 
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
 
                     b.Property<decimal>("OriginalPrice")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18, 2)");
 
                     b.Property<string>("ProductId")
                         .IsRequired()

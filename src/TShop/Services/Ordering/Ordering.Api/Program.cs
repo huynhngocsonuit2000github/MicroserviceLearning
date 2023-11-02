@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Ordering.Api.Consumer;
 using Ordering.Api.Data;
+using Ordering.Api.Options;
 using Ordering.Api.Services;
 using static MassTransit.Logging.OperationName;
 
@@ -29,11 +30,9 @@ builder.Services.AddMassTransit(e =>
     e.AddConsumer<OrderConsumer>();
     e.UsingRabbitMq((context, configurator) =>
     {
-        //var rabbitMQSettings = builder.Configuration.GetSection(nameof(RabbitMQSettings)).Get<RabbitMQSettings>();
-        //configurator.Host(rabbitMQSettings!.Host);
-        //configurator.ConfigureEndpoints(context, new KebabCaseEndpointNameFormatter("basketapiapi", false));
+        var rabbitMQSettings = builder.Configuration.GetSection(nameof(RabbitMQSettings)).Get<RabbitMQSettings>();
 
-        configurator.Host("localhost", h => { h.Username("user"); h.Password("user123"); });
+        configurator.Host(rabbitMQSettings!.Host, h => { h.Username("user"); h.Password("user123"); });
         configurator.ConfigureEndpoints(context);
     });
 }); 
@@ -51,7 +50,7 @@ using (var scope = app.Services.CreateScope())
 
     // Ensure that always create the new database if if is not exists
 
-    logger.LogInformation("==>> Start Running migrations");
+    logger.LogInformation("==>> Start Running migrations with connection string \n" + builder.Configuration.GetConnectionString("OrderingDbContextConnection"));
     await context.Database.MigrateAsync();
     logger.LogInformation("==>> End Running migrations");
 }
