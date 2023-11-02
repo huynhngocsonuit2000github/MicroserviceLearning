@@ -3,7 +3,7 @@ using Basket.Api.Factory;
 using Basket.Api.Options;
 using Basket.Api.Repository;
 using Basket.Api.SyncData;
-using Grpc.Net.Client;
+using MassTransit;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,6 +29,21 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddScoped<IGrpcChannelFactory, GrpcChannelFactory>();
 builder.Services.AddScoped<IDiscountproGrpc, DiscountproGrpc>();
 builder.Services.AddScoped<IProductproGrpc, ProductproGrpc>();
+
+// MassTransit
+builder.Services.AddMassTransit(e =>
+{
+    e.UsingRabbitMq((context, configurator) =>
+    {
+        var rabbitMQSettings = builder.Configuration.GetSection(nameof(RabbitMQSettings)).Get<RabbitMQSettings>();
+        //configurator.Host(rabbitMQSettings!.Host);
+        //configurator.ConfigureEndpoints(context, new KebabCaseEndpointNameFormatter("basketapiapi", false));
+
+        configurator.Host(rabbitMQSettings!.Host, h => { h.Username("user"); h.Password("user123"); });
+        configurator.ConfigureEndpoints(context);
+    });
+});
+
 
 var app = builder.Build();
 

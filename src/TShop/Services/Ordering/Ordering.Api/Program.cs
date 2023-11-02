@@ -1,7 +1,10 @@
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Ordering.Api.Consumer;
 using Ordering.Api.Data;
 using Ordering.Api.Services;
+using static MassTransit.Logging.OperationName;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +22,21 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("OrderingDbContextConnection")));
 
 builder.Services.AddScoped<IOrderService, OrderService>();
+
+// MassTransit
+builder.Services.AddMassTransit(e =>
+{
+    e.AddConsumer<OrderConsumer>();
+    e.UsingRabbitMq((context, configurator) =>
+    {
+        //var rabbitMQSettings = builder.Configuration.GetSection(nameof(RabbitMQSettings)).Get<RabbitMQSettings>();
+        //configurator.Host(rabbitMQSettings!.Host);
+        //configurator.ConfigureEndpoints(context, new KebabCaseEndpointNameFormatter("basketapiapi", false));
+
+        configurator.Host("localhost", h => { h.Username("user"); h.Password("user123"); });
+        configurator.ConfigureEndpoints(context);
+    });
+}); 
 
 var app = builder.Build();
 

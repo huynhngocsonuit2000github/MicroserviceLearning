@@ -5,11 +5,14 @@ WORKDIR /app
 EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+
 WORKDIR /src
-COPY ["Catalog.Api.csproj", "Catalog/Catalog.Api/"]
-RUN dotnet restore "Catalog/Catalog.Api/Catalog.Api.csproj"
-COPY . "Catalog/Catalog.Api/"
-WORKDIR "/src/Catalog/Catalog.Api"
+COPY ["Services/Catalog/Catalog.Api/Catalog.Api.csproj", "Services/Catalog/Catalog.Api/"]
+RUN dotnet restore "Services/Catalog/Catalog.Api/Catalog.Api.csproj"
+
+COPY ["Services/Catalog/Catalog.Api", "Services/Catalog/Catalog.Api/"]
+
+WORKDIR "/src/Services/Catalog/Catalog.Api"
 RUN dotnet build "Catalog.Api.csproj" -c Release -o /app/build
 
 FROM build AS publish

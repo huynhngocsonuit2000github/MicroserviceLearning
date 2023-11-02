@@ -1,4 +1,4 @@
-﻿namespace Ordering.Api.Model
+﻿namespace Common
 {
     public class OrderItemRequest
     {

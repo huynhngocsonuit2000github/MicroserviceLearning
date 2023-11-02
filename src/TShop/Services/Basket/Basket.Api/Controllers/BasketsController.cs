@@ -2,6 +2,8 @@
 using Basket.Api.Model;
 using Basket.Api.Repository;
 using Basket.Api.SyncData;
+using Common;
+using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
 using System.Net;
@@ -17,14 +19,16 @@ namespace Basket.Api.Controllers
         private readonly ICartItemRepository _cartItemRepository;
         private readonly IDiscountproGrpc _discountproGrpc;
         private readonly IProductproGrpc _productproGrpc;
+        private readonly IPublishEndpoint _publishEndpoint;
 
-        public BasketsController(ICartRepository repository, ILogger<BasketsController> logger, ICartItemRepository cartItemRepository, IDiscountproGrpc discountproGrpc, IProductproGrpc productproGrpc)
+        public BasketsController(ICartRepository repository, ILogger<BasketsController> logger, ICartItemRepository cartItemRepository, IDiscountproGrpc discountproGrpc, IProductproGrpc productproGrpc, IPublishEndpoint publishEndpoint)
         {
             _cartRepository = repository;
             _logger = logger;
             _cartItemRepository = cartItemRepository;
             _discountproGrpc = discountproGrpc;
             _productproGrpc = productproGrpc;
+            _publishEndpoint = publishEndpoint;
         }
 
         [HttpGet("{id:length(24)}", Name = "GetCartById")]
@@ -147,6 +151,35 @@ namespace Basket.Api.Controllers
             var res = await _cartRepository.UpdateCart(currentCart);
 
             return NoContent();
+        }
+
+        [HttpPost("Checkout/{userId}")]
+        [ProducesResponseType(typeof(Cart), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult> Checkout(string userId)
+        {
+            _logger.LogInformation("==>> Start Checkout and send message to the message queue");
+
+            var cart = await _cartRepository.GetCartByUserId(userId);
+
+            var cartItems = await _cartItemRepository.GetCartItemByCartId(cart.Id.ToString());
+             
+            await _publishEndpoint.Publish(new OrderRequest()
+            {
+                UserId = cart.UserId,
+                OrderItems = cartItems.Select(e => new OrderItemRequest()
+                {
+                    OriginalPrice = e.OriginalPrice,
+                    FinalPrice = e.FinalPrice,
+                    ProductId = e.ProductId,
+                    ProductName = e.ProductName,
+                    Quantity = e.Quantity
+                }).ToList()
+            });
+
+            // Chua remove, done remove
+            _logger.LogError("==>> TODO: Implement remove cart when successfully checkouting");
+
+            return Ok(1);
         }
     }
 }

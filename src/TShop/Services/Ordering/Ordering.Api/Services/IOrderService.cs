@@ -1,5 +1,5 @@
-﻿using Ordering.Api.Entity;
-using Ordering.Api.Model;
+﻿using Common;
+using Ordering.Api.Entity;
 
 namespace Ordering.Api.Services
 {

@@ -5,11 +5,14 @@ WORKDIR /app
 EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+
 WORKDIR /src
-COPY ["Discounts.Api.csproj", "Discounts/Discounts.Api/"]
-RUN dotnet restore "Discounts/Discounts.Api/Discounts.Api.csproj"
-COPY . "Discounts/Discounts.Api/"
-WORKDIR "/src/Discounts/Discounts.Api"
+COPY ["Services/Discount/Discount.Api/Discounts.Api.csproj", "Services/Discount/Discount.Api/"]
+RUN dotnet restore "Services/Discount/Discount.Api/Discounts.Api.csproj"
+
+COPY ["Services/Discount/Discount.Api", "Services/Discount/Discount.Api/"]
+
+WORKDIR "/src/Services/Discount/Discount.Api"
 RUN dotnet build "Discounts.Api.csproj" -c Release -o /app/build
 
 FROM build AS publish

@@ -5,11 +5,14 @@ WORKDIR /app
 EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+
 WORKDIR /src
-COPY ["Authenticate.Api.csproj", "Authenticate/Authenticate.Api/"]
-RUN dotnet restore "Authenticate/Authenticate.Api/Authenticate.Api.csproj"
-COPY . "Authenticate/Authenticate.Api/"
-WORKDIR "/src/Authenticate/Authenticate.Api"
+COPY ["Services/Authenticate/Authenticate.Api/Authenticate.Api.csproj", "Services/Authenticate/Authenticate.Api/"]
+RUN dotnet restore "Services/Authenticate/Authenticate.Api/Authenticate.Api.csproj"
+
+COPY ["Services/Authenticate/Authenticate.Api", "Services/Authenticate/Authenticate.Api/"]
+
+WORKDIR "/src/Services/Authenticate/Authenticate.Api"
 RUN dotnet build "Authenticate.Api.csproj" -c Release -o /app/build
 
 FROM build AS publish

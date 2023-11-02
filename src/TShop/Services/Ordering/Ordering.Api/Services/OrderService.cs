@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Common;
+using Microsoft.EntityFrameworkCore;
 using Ordering.Api.Data;
 using Ordering.Api.Entity;
-using Ordering.Api.Model;
 
 namespace Ordering.Api.Services
 {

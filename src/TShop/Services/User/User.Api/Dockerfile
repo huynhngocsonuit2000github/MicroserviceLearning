@@ -6,11 +6,14 @@ EXPOSE 80
 EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+
 WORKDIR /src
-COPY ["Users.Api.csproj", "User/User.Api/"]
-RUN dotnet restore "User/User.Api/Users.Api.csproj"
-COPY . "User/User.Api/"
-WORKDIR "/src/User/User.Api"
+COPY ["Services/User/User.Api/Users.Api.csproj", "Services/User/User.Api/"]
+RUN dotnet restore "Services/User/User.Api/Users.Api.csproj"
+
+COPY ["Services/User/User.Api", "Services/User/User.Api/"]
+
+WORKDIR "/src/Services/User/User.Api"
 RUN dotnet build "Users.Api.csproj" -c Release -o /app/build
 
 FROM build AS publish

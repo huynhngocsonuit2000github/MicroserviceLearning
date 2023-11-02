@@ -1,7 +1,5 @@
-﻿using Azure.Core;
-using Microsoft.AspNetCore.Http;
+﻿using Common;
 using Microsoft.AspNetCore.Mvc;
-using Ordering.Api.Model;
 using Ordering.Api.Services;
 
 namespace Ordering.Api.Controllers

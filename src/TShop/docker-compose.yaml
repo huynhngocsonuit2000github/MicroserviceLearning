@@ -132,12 +132,23 @@ services:
       - ASPNETCORE_URLS=https://+:443
       - ASPNETCORE_Kestrel__Certificates__Default__Password=ssl123
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+      - RabbitMQSettings:Host=rabbitmq
     depends_on:
       - basketdb
     ports:
       - 8005:443
     volumes:
       - ./https:/https:ro 
+
+  rabbitmq:
+    container_name: rabbitmq
+    image: "rabbitmq:3-management"
+    ports:
+        - "5672:5672"
+        - "15672:15672"
+    environment:
+        RABBITMQ_DEFAULT_USER: user
+        RABBITMQ_DEFAULT_PASS: user123
 
 volumes:
   mongo_catalog_db:
