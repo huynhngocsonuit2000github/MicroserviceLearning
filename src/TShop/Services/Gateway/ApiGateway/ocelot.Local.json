@@ -1,0 +1,271 @@
+{
+  "Routes": [
+
+    // Catalog Web API
+    {
+      "UpstreamPathTemplate": "/api/Catalog",
+      "UpstreamHttpMethod": [ "Get", "Post", "Put" ],
+
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 8000
+        }
+      ],
+      "DownstreamPathTemplate": "/api/Catalog",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "UpstreamPathTemplate": "/api/Catalog/{productId}",
+      "UpstreamHttpMethod": [ "Get", "Delete" ],
+
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 8000
+        }
+      ],
+      "DownstreamPathTemplate": "/api/Catalog/{productId}",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "UpstreamPathTemplate": "/api/Catalog/GetProductByCategory/{category}",
+      "UpstreamHttpMethod": [ "Get" ],
+
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 8000
+        }
+      ],
+      "DownstreamPathTemplate": "/api/Catalog/GetProductByCategory/{category}",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+
+    // Authenticate Web API
+    {
+      "UpstreamPathTemplate": "/api/Authenticate/Login",
+      "UpstreamHttpMethod": [ "Post" ],
+
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 8001
+        }
+      ],
+      "DownstreamPathTemplate": "/api/Authenticate/Login",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+
+    // User Web API
+    {
+      "UpstreamPathTemplate": "/api/User",
+      "UpstreamHttpMethod": [ "Get", "Post", "Put" ],
+
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 8002
+        }
+      ],
+      "DownstreamPathTemplate": "/api/User",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "UpstreamPathTemplate": "/api/User/{id}",
+      "UpstreamHttpMethod": [ "Get", "Delete" ],
+
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 8002
+        }
+      ],
+      "DownstreamPathTemplate": "/api/User/{id}",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "UpstreamPathTemplate": "/api/User/GetUserByLoginRequest",
+      "UpstreamHttpMethod": [ "Post" ],
+
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 8002
+        }
+      ],
+      "DownstreamPathTemplate": "/api/User/GetUserByLoginRequest",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+
+    // Discount Web API
+    {
+      "UpstreamPathTemplate": "/api/Discounts",
+      "UpstreamHttpMethod": [ "Get", "Post", "Put" ],
+
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 8004
+        }
+      ],
+      "DownstreamPathTemplate": "/api/Discounts",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "UpstreamPathTemplate": "/api/Discounts/{id}",
+      "UpstreamHttpMethod": [ "Get", "Delete" ],
+
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 8004
+        }
+      ],
+      "DownstreamPathTemplate": "/api/Discounts/{id}",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "UpstreamPathTemplate": "/api/Discounts/GetDiscountByProductId/{productId}",
+      "UpstreamHttpMethod": [ "Post" ],
+
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 8004
+        }
+      ],
+      "DownstreamPathTemplate": "/api/Discounts/GetDiscountByProductId/{productId}",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+
+    // Basket Web API
+    {
+      "UpstreamPathTemplate": "/api/Baskets",
+      "UpstreamHttpMethod": [ "Get" ],
+
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 8005
+        }
+      ],
+      "DownstreamPathTemplate": "/api/Baskets",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "UpstreamPathTemplate": "/api/Baskets/{id}",
+      "UpstreamHttpMethod": [ "Get" ],
+
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 8005
+        }
+      ],
+      "DownstreamPathTemplate": "/api/Baskets/{id}",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "UpstreamPathTemplate": "/api/Baskets/GetCartByUserId/{id}",
+      "UpstreamHttpMethod": [ "Get" ],
+
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 8005
+        }
+      ],
+      "DownstreamPathTemplate": "/api/Baskets/GetCartByUserId/{id}",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "UpstreamPathTemplate": "/api/Baskets/AddToCart",
+      "UpstreamHttpMethod": [ "Post" ],
+
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 8005
+        }
+      ],
+      "DownstreamPathTemplate": "/api/Baskets/AddToCart",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "UpstreamPathTemplate": "/api/Baskets/Checkout/{userId}",
+      "UpstreamHttpMethod": [ "Post" ],
+
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 8005
+        }
+      ],
+      "DownstreamPathTemplate": "/api/Baskets/Checkout/{userId}",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+
+    // Ordering Web API
+    {
+      "UpstreamPathTemplate": "/api/Order",
+      "UpstreamHttpMethod": [ "Get" ],
+
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 8006
+        }
+      ],
+      "DownstreamPathTemplate": "/api/Order",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "UpstreamPathTemplate": "/api/Order/{id}",
+      "UpstreamHttpMethod": [ "Get" ],
+
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 8006
+        }
+      ],
+      "DownstreamPathTemplate": "/api/Order/{id}",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "UpstreamPathTemplate": "/api/Order/Checkout",
+      "UpstreamHttpMethod": [ "Post" ],
+
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 8006
+        }
+      ],
+      "DownstreamPathTemplate": "/api/Order/Checkout",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    }
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl": "https://localhost:5010"
+  }
+}
