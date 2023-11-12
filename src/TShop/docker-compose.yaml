@@ -158,6 +158,21 @@ services:
     volumes:
       - ./https:/https:ro 
   
+  ui.fe:
+    image: tshop-uife-img:latest
+    user: root
+    container_name: uife
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=ssl123
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+      - AppSettings:BaseServerUrl=https://apigatewayapi:443
+    ports:
+      - 8007:443
+    volumes:
+      - ./https:/https:ro 
+  
   apigateway.api:
     image: tshop-apigateway-img:latest
     user: root

@@ -172,7 +172,7 @@ namespace Basket.Api.Controllers
                     FinalPrice = (decimal)productPro.Price - (decimal)productDiscountPro.Amount, // from grpc, Catalog and Discount
                     ProductId = request.ProductId,
                     ProductName = productPro.Name, // from grpc Catalog
-                    Quantity = request.Quantity,
+                    Quantity = request.Quantity is null ? 1 : request.Quantity.Value,
                 };
                 await _cartItemRepository.CreateCartItem(newCartItem);
                 currentCart.CartItemIds.Add(newCartItem.Id);
@@ -181,7 +181,7 @@ namespace Basket.Api.Controllers
             {
                 existingCartItem.OriginalPrice = (decimal)productPro.Price;// from frpc Catalog
                 existingCartItem.FinalPrice = (decimal)productPro.Price - (decimal)productDiscountPro.Amount;// from grpc, Catalog and Discount
-                existingCartItem.Quantity = request.Quantity;
+                existingCartItem.Quantity = request.Quantity is null ? existingCartItem.Quantity + 1 : request.Quantity.Value;
                 await _cartItemRepository.UpdateCartItem(existingCartItem);
             }
 
@@ -210,7 +210,7 @@ namespace Basket.Api.Controllers
 
             var cartItems = await _cartItemRepository.GetCartItemByCartId(cart.Id.ToString());
 
-            if (cartItems is null || cartItems.Count() ==0)
+            if (cartItems is null || cartItems.Count() == 0)
             {
                 _logger.LogWarning("==>> The is no item in the cart corresponding with this user is not found");
                 return Ok("Ok");

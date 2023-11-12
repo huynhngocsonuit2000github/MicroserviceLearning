@@ -1,0 +1,22 @@
+﻿@model UI.FE.Models.LoginRequest
+
+<h2>Submit Form</h2>
+
+@using (Html.BeginForm())
+{
+    <div>
+        <label asp-for="Username"></label>
+        <input asp-for="Username" />
+        <span asp-validation-for="Username"></span>
+    </div>
+
+    <div>
+        <label asp-for="Password"></label>
+        <input asp-for="Password" />
+        <span asp-validation-for="Password"></span>
+    </div>
+
+    <!-- Add other form fields as needed -->
+
+    <button type="submit">Submit</button>
+}

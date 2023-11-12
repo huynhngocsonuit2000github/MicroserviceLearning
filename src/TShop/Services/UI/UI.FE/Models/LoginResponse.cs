@@ -1,4 +1,4 @@
-﻿namespace Authenticate.Api.Model
+﻿namespace UI.FE.Models
 {
     public class LoginResponse
     {

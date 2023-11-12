@@ -1,4 +1,4 @@
-﻿namespace Basket.Api.Model
+﻿namespace UI.FE.Models
 {
     public class CartItemAddingRequest
     {

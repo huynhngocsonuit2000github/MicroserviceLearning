@@ -57,9 +57,11 @@ namespace Authenticate.Api.SyncData
                 RoleId = reply.RoleId,
                 RoleName = role.Name
             });
-             
+
             var response = new LoginResponse()
             {
+                Username = request.Username,
+                UserId = reply.Id,
                 Token = token
             };
 

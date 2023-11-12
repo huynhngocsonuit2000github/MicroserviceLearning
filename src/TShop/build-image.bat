@@ -6,3 +6,4 @@ docker build -t tshop-discounts-img -f .\Services\Discount\Discount.Api\Dockerfi
 docker build -t tshop-basket-img -f .\Services\Basket\Basket.Api\Dockerfile .
 docker build -t tshop-ordering-img -f .\Services\Ordering\Ordering.Api\Dockerfile .
 docker build -t tshop-apigateway-img -f .\Services\Gateway\ApiGateway\Dockerfile .
+docker build -t tshop-uife-img -f .\Services\UI\UI.FE\Dockerfile .

@@ -1,0 +1,64 @@
+﻿@{
+    @model UI.FE.Models.CartResponse
+
+}
+
+<h1>Cart Page</h1>
+
+<table class="table table-sm">
+    <thead>
+        <tr>
+            <th scope="col">Product Name</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Original price</th>
+            <th scope="col">Final price</th>
+            <th scope="col">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.CartItemIds)
+        {
+            <tr>
+                <td scope="col">@item.ProductName</td>
+                <td scope="col">@item.Quantity</td>
+                <td scope="col">@item.OriginalPrice</td>
+                <td scope="col">@item.FinalPrice</td>
+                <td scope="col">
+                    <form asp-controller="Basket" asp-action="AddToCart" method="post">
+                        <input type="hidden" name="UserId" value="@Model.UserId">
+                        <input type="hidden" name="ProductId" value="@item.ProductId">
+                        <input type="hidden" name="Quantity" value="@(item.Quantity + 1)">
+                        <button type="submit">+</button>
+                    </form>
+                    @if (item.Quantity > 0)
+                    {
+                        <form asp-controller="Basket" asp-action="AddToCart" method="post">
+                            <input type="hidden" name="UserId" value="@Model.UserId">
+                            <input type="hidden" name="ProductId" value="@item.ProductId">
+                            <input type="hidden" name="Quantity" value="@(item.Quantity - 1)">
+                            <button type="submit">-</button>
+                        </form>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <th>
+                Original total price:
+            </th>
+            <td>
+                @Model.OriginalPrice
+            </td>
+        </tr>
+        <tr>
+            <th>
+                Original final price:
+            </th>
+            <td>
+                @Model.FinalPrice
+            </td>
+        </tr>
+    </tfoot>
+</table>

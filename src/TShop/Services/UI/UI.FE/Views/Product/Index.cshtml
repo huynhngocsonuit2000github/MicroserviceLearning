@@ -1,0 +1,32 @@
+﻿@{
+    @model IEnumerable<UI.FE.ResponseDto.Product>
+
+}
+
+<h1>Product Page</h1>
+
+<table class="table table-sm">
+    <thead>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Category Name</th>
+            <th scope="col">Summary</th>
+            <th scope="col">Price</th>
+            <th scope="col">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td scope="col">@item.Name</td>
+                <td scope="col">@item.CategoryName</td>
+                <td scope="col">@item.Summary</td>
+                <td scope="col">@item.Price</td>
+                <td scope="col">
+                    <a class="btn btn-primary" asp-area="" asp-controller="Product" asp-action="AddToCart" asp-route-productId="@item.Id">Add to cart</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
