@@ -19,7 +19,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docker", "Docker", "{A4C372
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F75C15B8-03AA-4C0A-8601-CEC0E68D7D9E}"
 	ProjectSection(SolutionItems) = preProject
-		build-image.bat = build-image.bat
 		docker-compose.yaml = docker-compose.yaml
 	EndProjectSection
 EndProject
@@ -53,7 +52,22 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiGateway", "Services\Gate
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{459EBB9A-B551-405D-BF7E-E9F10FC0C8A9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UI.FE", "Services\UI\UI.FE\UI.FE.csproj", "{96C379C9-A20E-4F41-81BF-2A195EC64327}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UI.FE", "Services\UI\UI.FE\UI.FE.csproj", "{96C379C9-A20E-4F41-81BF-2A195EC64327}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "K8S", "K8S", "{5A55A2BC-9962-43C9-A5F7-B9A6DEB30DD9}"
+	ProjectSection(SolutionItems) = preProject
+		catalog.config.yaml = catalog.config.yaml
+		catalog.database.yaml = catalog.database.yaml
+		catalog.service.yaml = catalog.service.yaml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bat", "Bat", "{4E209E8A-77A0-49AB-8872-3695712248D6}"
+	ProjectSection(SolutionItems) = preProject
+		apply-k8s.bat = apply-k8s.bat
+		build-image.bat = build-image.bat
+		push-image.bat = push-image.bat
+		tag-image.bat = tag-image.bat
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment                # kind is Deployment
+metadata:
+  name: mongo-catalog-deployment          # name for the deployment
+  labels:
+    app: mongo-catalog                    # label for the deployment
+spec:
+  replicas: 1                   # ensure that always scale 1 pod
+  selector:
+    matchLabels:
+      app: mongo-catalog                  # Just many and scale base on label named sql
+  template:                     # template section is will define for the pod when scaling
+    metadata:
+      labels:
+        app: mongo-catalog                # the pod will have label sql
+    spec:                       # define the pod
+      containers:               # define how many container on the pod, there can be so many container inside thje pod
+        - name: catalogdb       # name for container
+          image: mongo:latest     # image is used for the container
+          ports:
+            - containerPort: 27017       # the port container will expose 
+
+---     # use those charaters to separate a section with another section
+apiVersion: v1  
+kind: Service       # we often create the Service that along with the main pod we want to map
+metadata:
+  name: mongo-catalog-service # name of service
+spec:
+  selector:
+    app: mongo-catalog        # when the request go to this service, the service will redirect to the pod with label sql
+  ports:
+    - protocol: TCP
+      port: 27017    # the port when getting the request from some where
+      targetPort: 27017 # the port of sql server

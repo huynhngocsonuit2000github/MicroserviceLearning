@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment                # kind is Deployment
+metadata:
+  name: api-catalog-deployment          # name for the deployment
+  labels:
+    app: api-catalog                    # label for the deployment
+spec:
+  replicas: 1                   # ensure that always scale 1 pod
+  selector:
+    matchLabels:
+      app: api-catalog                  # Just many and scale base on label named sql
+  template:                     # template section is will define for the pod when scaling
+    metadata:
+      labels:
+        app: api-catalog                # the pod will have label sql
+    spec:                       # define the pod
+      containers:               # define how many container on the pod, there can be so many container inside thje pod
+        - name: catalogapi       # name for container
+          image: huynhngocsonuit2000docker/microservicelearning:tshop-catalog-img     # image is used for the container
+          ports:
+            - containerPort: 6000       # the port container will expose env:
+          env:
+            - name: ProductDatabaseSettings__ConnectionString
+              value: "mongodb://mongo-catalog-service:27017"
+
+---     # use those charaters to separate a section with another section
+apiVersion: v1  
+kind: Service       # we often create the Service that along with the main pod we want to map
+metadata:
+  name: api-catalog-service # name of service
+spec:
+  selector:
+    app: api-catalog        # when the request go to this service, the service will redirect to the pod with label sql
+  ports:
+    - protocol: TCP
+      port: 6000    # the port when getting the request from some where
+      targetPort: 6000 # the port of sql server
+      nodePort: 30007
+  type: NodePort  

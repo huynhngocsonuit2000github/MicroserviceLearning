@@ -1,0 +1,4 @@
+ProductDatabaseSettings:
+  ConnectionString: "mongodb://mongo-catalog-service:27017"
+  DatabaseName: "product"
+  ProductsCollectionName: "products"
