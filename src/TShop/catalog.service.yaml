@@ -35,5 +35,5 @@ spec:
     - protocol: TCP
       port: 6000    # the port when getting the request from some where
       targetPort: 6000 # the port of sql server
-      nodePort: 30007
-  type: NodePort  
+      nodePort: 31000
+  type: NodePort

@@ -3,7 +3,10 @@ using Catalog.Api.Entity;
 using Catalog.Api.Options;
 using Catalog.Api.Repository;
 using Catalog.Api.Services;
+using Microsoft.AspNetCore.Server.Kestrel.Https;
 using Microsoft.OpenApi.Models;
+using System.Net;
+using System.Security.Cryptography.X509Certificates;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +25,27 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 builder.Services.AddGrpc();
+
+
+try
+{
+    var certificate = new X509Certificate2("tls.pfx", "ssl123");
+    builder.WebHost.UseKestrel(options =>
+    {
+        options.Listen(IPAddress.Any, 6000, listenOptions =>
+        {
+            listenOptions.UseHttps(new HttpsConnectionAdapterOptions
+            {
+                ServerCertificate = certificate
+            });
+        });
+    });
+
+}
+catch (Exception ex)
+{
+    Console.WriteLine("==== Error: " + ex.Message);
+}
 
 var app = builder.Build();
 

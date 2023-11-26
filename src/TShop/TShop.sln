@@ -12,6 +12,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Note", "Note", "{B52FD5D9-7EA1-44D6-8F0F-B0869BF14227}"
 	ProjectSection(SolutionItems) = preProject
 		Catalog.Service.Note.md = Catalog.Service.Note.md
+		Kubernetes.Note.md = Kubernetes.Note.md
 		Users.Service.Note.md = Users.Service.Note.md
 	EndProjectSection
 EndProject
