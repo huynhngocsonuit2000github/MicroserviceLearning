@@ -2,8 +2,8 @@
 
 FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 WORKDIR /app
-EXPOSE 6000
-ENV ASPNETCORE_URLS=https://+:6000
+EXPOSE 443
+ENV ASPNETCORE_URLS=https://+:443
 COPY "certs/tls.pfx" . 
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build

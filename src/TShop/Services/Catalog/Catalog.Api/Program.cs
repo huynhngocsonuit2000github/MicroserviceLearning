@@ -26,13 +26,12 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.AddGrpc();
 
-
 try
 {
     var certificate = new X509Certificate2("tls.pfx", "ssl123");
     builder.WebHost.UseKestrel(options =>
     {
-        options.Listen(IPAddress.Any, 6000, listenOptions =>
+        options.Listen(IPAddress.Any, 443, listenOptions =>
         {
             listenOptions.UseHttps(new HttpsConnectionAdapterOptions
             {

@@ -57,7 +57,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UI.FE", "Services\UI\UI.FE\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "K8S", "K8S", "{5A55A2BC-9962-43C9-A5F7-B9A6DEB30DD9}"
 	ProjectSection(SolutionItems) = preProject
-		catalog.config.yaml = catalog.config.yaml
+		authenticate.database.yaml = authenticate.database.yaml
+		authenticate.service.yaml = authenticate.service.yaml
 		catalog.database.yaml = catalog.database.yaml
 		catalog.service.yaml = catalog.service.yaml
 	EndProjectSection

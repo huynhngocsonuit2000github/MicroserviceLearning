@@ -9,6 +9,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Server.Kestrel.Https;
+using System.Net;
+using System.Security.Cryptography.X509Certificates;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -74,6 +77,28 @@ builder.Services.AddAuthentication(opt =>
         IssuerSigningKey = new SymmetricSecurityKey(signingKeyBytes)
     };
 });
+
+
+
+try
+{
+    var certificate = new X509Certificate2("tls.pfx", "ssl123");
+    builder.WebHost.UseKestrel(options =>
+    {
+        options.Listen(IPAddress.Any, 443, listenOptions =>
+        {
+            listenOptions.UseHttps(new HttpsConnectionAdapterOptions
+            {
+                ServerCertificate = certificate
+            });
+        });
+    });
+
+}
+catch (Exception ex)
+{
+    Console.WriteLine("==== Error: " + ex.Message);
+}
 
 
 var app = builder.Build();
